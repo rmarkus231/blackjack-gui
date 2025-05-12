@@ -1,0 +1,30 @@
+/* Üldine akna taust (nüüd rakendub .root-ile) */
+.root {
+    -fx-background-color: lightgray;
+}
+
+/* Käte kastid */
+#player-hand,
+#dealer-hand {
+    -fx-background-color: coral;
+    -fx-padding: 12;
+    -fx-background-radius: 8;
+}
+
+/* TilePane, et kaardid kataksid üksteist */
+.tile-pane {
+    -fx-hgap: -40;   /* negatiivne, et kattuvad */
+    -fx-vgap: 0;
+}
+
+/* Kaardi drop-shadow efekt */
+.tile-pane .stack-pane {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
+}
+
+/* Mängu lõpu tulemustekst */
+.result {
+    -fx-font-size: 24px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+}
