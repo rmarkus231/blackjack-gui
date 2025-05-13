@@ -1,6 +1,7 @@
 package ee.projekt.blackjackgui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,7 +28,8 @@ public class G_Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        kuvaSeadistusVaade();
+        //kuvaSeadistusVaade();
+        kuvaMainMenu();
     }
 
     private Stage primaryStage;
@@ -48,6 +50,60 @@ public class G_Main extends Application {
             CheckBox botCheck = new CheckBox("robot?");
             box.getChildren().add(new HBox(10, lbl, nameField, botCheck));
         }
+    }
+
+    private void kuvaMainMenu(){
+        Button startButton = new Button("Start");
+        startButton.setOnAction(e -> {
+            kuvaSeadistusVaade();
+        });
+
+        Button helpButton = new Button("Help");
+        helpButton.setOnAction(e -> {
+            kuvaHelp();
+        });
+
+        Button infoButton = new Button("Info");
+        infoButton.setOnAction(e -> {
+            kuvaInfo();
+        });
+
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(e -> {
+            Platform.exit();
+        });
+        VBox root = new VBox(15, startButton, helpButton, infoButton, exitButton);
+        root.setPadding(new Insets(20));
+        primaryStage.setTitle("Blackjack");
+        primaryStage.setScene(new Scene(root, 400, 400));
+        primaryStage.show();
+    }
+
+    private void kuvaInfo(){
+        Label infoLabel = new Label("Info selle kohta kes mängu tegid");
+        Button backButton = new Button("Main menu");
+        backButton.setOnAction(e -> {
+            kuvaMainMenu();
+        });
+        VBox root = new VBox(15, infoLabel, backButton);
+        root.setPadding(new Insets(20));
+        primaryStage.setTitle("Blackjack - info");
+        primaryStage.setScene(new Scene(root, 400, 400));
+        primaryStage.show();
+    }
+
+    private void kuvaHelp(){
+        //TODO lisada siia tekst mis kirjeldab kuidas mängu mängida
+        Label tekstLabel = new Label("Lisa siia tekst kuidas mängida.");
+        Button backButton = new Button("Main menu");
+        backButton.setOnAction(e -> {
+            kuvaMainMenu();
+        });
+        VBox root = new VBox(15, tekstLabel, backButton);
+        root.setPadding(new Insets(20));
+        primaryStage.setTitle("Blackjack - help");
+        primaryStage.setScene(new Scene(root, 400, 400));
+        primaryStage.show();
     }
 
     private void kuvaSeadistusVaade() {
