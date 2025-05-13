@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- * G_Main käivitab Blackjack mängu graafilise kasutajaliidese.
- * Esmalt konfiguratsioon, seejärel korduv turnipõhine mäng.
+/** G_Main käivitab Blackjack mängu graafilise kasutajaliidese.
+ * Esmalt mainmenu ja seaded, seejärel korduv turnipõhine mäng.
  */
 public class G_Main extends Application {
     private Kaardipakk deck;
@@ -34,15 +33,8 @@ public class G_Main extends Application {
 
     private Stage primaryStage;
 
-    /**
-     * Kuvab konfigureerimise vaate.
-     */
-    /**
-     * Uuendab dünaamiliselt mängijate nime- ja robotivälju konfiguratsioonivaates.
-     * @param box konteiner väljade jaoks
-     * @param count mängijate arv
-     */
-    private void uuendaMangujateKonfiguratsioonivaljad(VBox box, int count) {
+    // kuvab ja uuendab esialgsete seadete vaate
+    private void uuendaMangijateSeaded(VBox box, int count) {
         box.getChildren().clear();
         for (int i = 1; i <= count; i++) {
             Label lbl = new Label("Mängija " + i + " nimi:");
@@ -122,9 +114,9 @@ public class G_Main extends Application {
         playersBox.setAlignment(Pos.CENTER_LEFT);
 
         VBox playersConfigBox = new VBox(10);
-        uuendaMangujateKonfiguratsioonivaljad(playersConfigBox, playersSpinner.getValue());
+        uuendaMangijateSeaded(playersConfigBox, playersSpinner.getValue());
         playersSpinner.valueProperty().addListener((obs, oldV, newV) ->
-                uuendaMangujateKonfiguratsioonivaljad(playersConfigBox, newV)
+                uuendaMangijateSeaded(playersConfigBox, newV)
         );
 
         Button startBtn = new Button("Alusta mängu");
@@ -142,7 +134,7 @@ public class G_Main extends Application {
 
         VBox root = new VBox(15, decksBox, playersBox, playersConfigBox, startBtn);
         root.setPadding(new Insets(20));
-        primaryStage.setTitle("Blackjack - Konfiguratsioon");
+        primaryStage.setTitle("Blackjack");
         primaryStage.setScene(new Scene(root, 400, 400));
         primaryStage.show();
     }
@@ -152,22 +144,20 @@ public class G_Main extends Application {
     private VBox controlsBox;
     private Button hitBtn, standBtn;
 
-    /**
-     * Käivitab mänguvoo ja kuvab mängu akna.
-     */
+    //Käivitab mänguvoo ja kuvab mängu akna.
     private void initGame(Stage stage, int deckCount) {
         try {
             deck = new Kaardipakk(deckCount);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        dealerView = new G_käsi(new ArrayList<>());
+        dealerView = new G_käsi(new ArrayList<>(), false);
         playerHands = new ArrayList<>();
         currentPlayer = 0;
 
         // Ülakeha (diiler)
         Label dealerLabel = new Label("Diiler");
-        // Dealer gets two initial cards
+        // Diiler saab 2 algkaarti
         dealerView.lisaKaart(deck.jaga());
         dealerView.lisaKaart(deck.jaga());
         Pane dealerPane = dealerView.getNode();
@@ -175,11 +165,11 @@ public class G_Main extends Application {
         VBox topBox = new VBox(5, dealerLabel, dealerPane);
         topBox.setAlignment(Pos.CENTER);
 
-        // Allkorpus (mängijad)
+        // Allosas mängijad
         HBox playersBox = new HBox(20);
         playersBox.setAlignment(Pos.CENTER);
         for (PlayerConfig pc : configs) {
-            G_käsi hand = new G_käsi(new ArrayList<>());
+            G_käsi hand = new G_käsi(new ArrayList<>(), true);
             playerHands.add(hand);
             Pane pPane = hand.getNode();
             pPane.setId(pc.isBot?"dealer-hand":"player-hand");
@@ -220,9 +210,7 @@ public class G_Main extends Application {
         updateControls();
     }
 
-    /**
-     * Käib läbi Hit toimingu praegusel mängijal.
-     */
+    //Käib läbi Hit toimingu praegusel mängijal.
     private void onHit() {
         G_käsi hand = playerHands.get(currentPlayer);
         hand.lisaKaart(deck.jaga());
@@ -231,9 +219,7 @@ public class G_Main extends Application {
         }
     }
 
-    /**
-     * Käib läbi Stand toimingu praegusel mängijal ja liigub järgmise juurde või diileri juurde.
-     */
+    //Käib läbi Stand toimingu praegusel mängijal ja liigub järgmise juurde või diileri juurde.
     private void onStand() {
         currentPlayer++;
         if (currentPlayer < playerHands.size()) {
@@ -256,9 +242,7 @@ public class G_Main extends Application {
         }
     }
 
-    /**
-     * Uuendab nupud ja sildid järgmiseks mängijaks.
-     */
+    //Uuendab nupud ja sildid järgmiseks mängijaks.
     private void updateControls() {
         PlayerConfig pc = configs.get(currentPlayer);
         hitBtn.setText("Hit: " + pc.name);
@@ -271,9 +255,7 @@ public class G_Main extends Application {
         }
     }
 
-    /*
-     * Arvutab käe väärtuse Blackjack reeglite järgi.
-     */
+    //Arvutab käe väärtuse Blackjack reeglite järgi.
     private int arvutaSumma(List<Kaart> kaardid) {
         int sum = 0, aces = 0;
         for (Kaart k : kaardid) {
@@ -288,9 +270,7 @@ public class G_Main extends Application {
         return sum;
     }
 
-    /**
-     * Abiklass mängija nime ja roboti oleku hoidmiseks.
-     */
+    //Abiklass mängija nime ja roboti oleku hoidmiseks.
     private static class PlayerConfig {
         final String name;
         final boolean isBot;
