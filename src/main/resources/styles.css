@@ -1,19 +1,68 @@
 /* Üldine akna taust (nüüd rakendub .root-ile) */
 .root {
-    -fx-background-color: lightgray;
+    -fx-background-image: url("wood-seamless.jpg");
+    -fx-background-repeat: repeat;         /* or no-repeat, stretch */
+    -fx-background-position: center center;
+    -fx-background-size: auto;
 }
 
 /* Käte kastid */
-#player-hand,
-#dealer-hand {
-    -fx-background-color: coral;
+.card-hand {
+    -fx-background-image: url("green-cloth.jpg");
+    -fx-background-repeat: repeat;         /* or no-repeat, stretch */
+    -fx-background-position: center center;
+    -fx-background-size: auto;
     -fx-padding: 12;
-    -fx-background-radius: 8;
+    -fx-background-radius: 15px;
+    -fx-background-insets: 0;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+}
+
+.nuppud {
+    -fx-text-fill: black;
+    -fx-background-color: #32783C;
+    -fx-background-radius: 3px, 3px;
+    -fx-padding: 10%, 10%;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-background-insets: 0;
+    -fx-background-insets: 0;
+    -fx-font-size: 18px;
+}
+
+/* silt jooksva skoori näitamiseks*/
+.skoor-silt {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.vbox {
+    -fx-padding: 10px,0px;
+}
+
+.nime-silt {
+    -fx-font-size: 23px;
+    -fx-text-fill: black;
+    -fx-background-color: #32783C;
+    -fx-background-radius: 10px, 10px;
+    -fx-padding: 10%, 10%;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-insets: 0;
+    -fx-background-insets: 0;
+}
+
+/* silt sättede sildi jaoks */
+.seade-silt {
+    -fx-font-size: 14px;
 }
 
 /* TilePane, et kaardid kataksid üksteist */
 .tile-pane {
-    -fx-hgap: -40;   /* negatiivne, et kattuvad */
+    -fx-hgap: -20;   /* negatiivne, et kattuvad */
     -fx-vgap: 0;
 }
 
@@ -24,7 +73,15 @@
 
 /* Mängu lõpu tulemustekst */
 .result {
-    -fx-font-size: 24px;
-    -fx-text-fill: #333;
-    -fx-font-weight: bold;
+    -fx-font-size: 23px;
+    -fx-text-fill: black;
+    -fx-background-color: #32783C;
+    -fx-background-radius: 10px, 10px;
+    -fx-padding: 10%, 10%;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-insets: 0;
+    -fx-background-insets: 0;
+
 }

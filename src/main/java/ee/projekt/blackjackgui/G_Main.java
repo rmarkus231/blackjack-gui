@@ -8,11 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /** G_Main käivitab Blackjack mängu graafilise kasutajaliidese.
  * Esmalt mainmenu ja seaded, seejärel korduv turnipõhine mäng.
@@ -72,6 +72,7 @@ public class G_Main extends Application {
     }
 
     private void kuvaInfo(){
+        //TODO lisada siia tekst mis kirjeldab kuidas mängu mängida
         Label infoLabel = new Label("Info selle kohta kes mängu tegid");
         Button backButton = new Button("Main menu");
         backButton.setOnAction(e -> {
@@ -100,6 +101,7 @@ public class G_Main extends Application {
 
     private void kuvaSeadistusVaade() {
         Label decksLabel = new Label("Pakkide arv:");
+        decksLabel.setStyle(CssUtil.getCss("seade-silt"));
         Spinner<Integer> decksSpinner = new Spinner<>(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 8, 1)
         );
@@ -107,6 +109,7 @@ public class G_Main extends Application {
         decksBox.setAlignment(Pos.CENTER_LEFT);
 
         Label playersLabel = new Label("Mängijate arv:");
+        playersLabel.setStyle(CssUtil.getCss("seade-silt"));
         Spinner<Integer> playersSpinner = new Spinner<>(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, 2)
         );
@@ -143,9 +146,11 @@ public class G_Main extends Application {
     private BorderPane gameRoot;
     private VBox controlsBox;
     private Button hitBtn, standBtn;
+    private Button confBtn, restartBtn;
 
     //Käivitab mänguvoo ja kuvab mängu akna.
     private void initGame(Stage stage, int deckCount) {
+        //see loop ainult objektid mängu alustamiseks
         try {
             deck = new Kaardipakk(deckCount);
         } catch (Exception e) {
@@ -157,12 +162,14 @@ public class G_Main extends Application {
 
         // Ülakeha (diiler)
         Label dealerLabel = new Label("Diiler");
+        dealerLabel.setStyle(CssUtil.getCss("nime-silt"));
         // Diiler saab 2 algkaarti
         dealerView.lisaKaart(deck.jaga());
         dealerView.lisaKaart(deck.jaga());
-        Pane dealerPane = dealerView.getNode();
-        dealerPane.setId("dealer-hand"); dealerPane.setScaleX(0.6); dealerPane.setScaleY(0.6);
+        GridPane dealerPane = (GridPane)dealerView.getNode();
+        dealerPane.setStyle(CssUtil.getCss("card-hand")); dealerPane.setScaleX(0.9); dealerPane.setScaleY(0.9);
         VBox topBox = new VBox(5, dealerLabel, dealerPane);
+        topBox.setStyle(CssUtil.getCss("vbox"));
         topBox.setAlignment(Pos.CENTER);
 
         // Allosas mängijad
@@ -171,10 +178,11 @@ public class G_Main extends Application {
         for (PlayerConfig pc : configs) {
             G_käsi hand = new G_käsi(new ArrayList<>(), true);
             playerHands.add(hand);
-            Pane pPane = hand.getNode();
-            pPane.setId(pc.isBot?"dealer-hand":"player-hand");
+            GridPane pPane = (GridPane)hand.getNode();
+            pPane.setStyle(CssUtil.getCss("card-hand"));
             pPane.setScaleX(0.6); pPane.setScaleY(0.6);
             Label nameLbl = new Label(pc.name);
+            nameLbl.setStyle(CssUtil.getCss("nime-silt"));
             VBox box = new VBox(5, nameLbl, pPane);
             box.setAlignment(Pos.CENTER);
             playersBox.getChildren().add(box);
@@ -184,8 +192,10 @@ public class G_Main extends Application {
         }
 
         // Nupud
-        hitBtn = new Button("Hit");
-        standBtn = new Button("Stand");
+        hitBtn = new Button("Hit"); hitBtn.setMinWidth(150);
+        hitBtn.setStyle(CssUtil.getCss("nuppud"));
+        standBtn = new Button("Stand"); standBtn.setMinWidth(150);
+        standBtn.setStyle(CssUtil.getCss("nuppud"));
         hitBtn.setMaxWidth(Double.MAX_VALUE); standBtn.setMaxWidth(Double.MAX_VALUE);
         controlsBox = new VBox(10, hitBtn, standBtn);
         controlsBox.setAlignment(Pos.TOP_CENTER);
@@ -200,14 +210,25 @@ public class G_Main extends Application {
         gameRoot.setTop(topBox);
         gameRoot.setBottom(playersBox);
         gameRoot.setRight(controlsBox);
-        gameRoot.setBackground(new Background(new BackgroundFill(
-                Color.web("#F5F5F5"), CornerRadii.EMPTY, Insets.EMPTY)));
-
+        //gameRoot.setBackground(new Background(new BackgroundFill(
+        //        Color.web("#5c442d"), CornerRadii.EMPTY, Insets.EMPTY)));
+        gameRoot.setStyle(CssUtil.getCss("root"));
         stage.setTitle("Blackjack");
         stage.setScene(new Scene(gameRoot, 800, 600));
         stage.show();
 
         updateControls();
+    }
+
+    private void runGame(){
+        try {
+            deck.reset();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        dealerView.getKaardid().clear();
+        dealerView.lisaKaart(deck.jaga());
+        dealerView.lisaKaart(deck.jaga());
     }
 
     //Käib läbi Hit toimingu praegusel mängijal.
@@ -295,7 +316,8 @@ public class G_Main extends Application {
         Label resultLabel = new Label(
                 String.format("Mäng läbi! Võitja: %s (%d)", winner, best)
         );
-        resultLabel.getStyleClass().add("result");
+
+        resultLabel.setStyle(CssUtil.getCss("result"));
         BorderPane.setAlignment(resultLabel, Pos.CENTER);
         gameRoot.setCenter(resultLabel);
     }

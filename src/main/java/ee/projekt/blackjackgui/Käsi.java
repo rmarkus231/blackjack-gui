@@ -1,5 +1,6 @@
 package ee.projekt.blackjackgui;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public abstract class Käsi implements Comparable<Käsi> {
@@ -52,6 +53,19 @@ public abstract class Käsi implements Comparable<Käsi> {
         }
         return sum;
     }
+
+    public static int sum(List<Kaart> kaardid){
+        int sum = 0;
+        int ässad = getÄssad(kaardid);
+        for(int i = 0; i <= ässad;i++){
+            sum = sumArvestadesÄssad(i,kaardid);
+            if (sum <= 21) {
+                break;
+            }
+        }
+        return sum;
+    }
+
     private int sumArvestadesÄssad(int ässade_arv){
         //võtab summa arvestades, et N ässa on väärtusega 1
         int sum = 0;
@@ -68,11 +82,36 @@ public abstract class Käsi implements Comparable<Käsi> {
         return sum;
     }
 
+    private static int sumArvestadesÄssad(int ässade_arv, List<Kaart> kaardid){
+        //võtab summa arvestades, et N ässa on väärtusega 1
+        int sum = 0;
+        int i = 0;
+        for(Kaart kaart : kaardid){
+            if(kaart.onÄss() && i < ässade_arv){
+                sum += 1;
+                i++;
+            }else{
+                sum += kaart.getTugevus_i();
+            }
+        }
+        return sum;
+    }
+
     public int getÄssad(){
         int sum = 0;
         for(Kaart kaart : kaardid){
             if(kaart.onÄss()){
                 pehme = true;
+                sum++;
+            }
+        }
+        return sum;
+    }
+
+    public static int getÄssad(List<Kaart> kaardid){
+        int sum = 0;
+        for(Kaart kaart : kaardid){
+            if(kaart.onÄss()){
                 sum++;
             }
         }
