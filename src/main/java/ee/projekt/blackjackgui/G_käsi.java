@@ -61,6 +61,11 @@ public class G_käsi {
         käsi.getChildren().add(new G_kaart(kaart));
     }
 
+    public void clear(){
+        käsi.getChildren().clear();
+        kaardid.clear();
+    }
+
     // tagastab kaardid selles käes
     public List<Kaart> getKaardid() {
         return kaardid;

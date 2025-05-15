@@ -7,8 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -144,13 +142,15 @@ public class G_Main extends Application {
 
     // loogelised UI elemendid
     private BorderPane gameRoot;
-    private VBox controlsBox;
+    private VBox gameControlsBox, endControlsBox;
     private Button hitBtn, standBtn;
     private Button confBtn, restartBtn;
+    private Label tulemused;
 
-    //Käivitab mänguvoo ja kuvab mängu akna.
+    //see loob ainult objektid mängu alustamiseks
+    //mänguloogika on liigutatud meetodisse
+    //runGame(), selleks, et restartides ei oleks vaja luua kõik objektid uuesti.
     private void initGame(Stage stage, int deckCount) {
-        //see loop ainult objektid mängu alustamiseks
         try {
             deck = new Kaardipakk(deckCount);
         } catch (Exception e) {
@@ -163,9 +163,6 @@ public class G_Main extends Application {
         // Ülakeha (diiler)
         Label dealerLabel = new Label("Diiler");
         dealerLabel.setStyle(CssUtil.getCss("nime-silt"));
-        // Diiler saab 2 algkaarti
-        dealerView.lisaKaart(deck.jaga());
-        dealerView.lisaKaart(deck.jaga());
         GridPane dealerPane = (GridPane)dealerView.getNode();
         dealerPane.setStyle(CssUtil.getCss("card-hand")); dealerPane.setScaleX(0.9); dealerPane.setScaleY(0.9);
         VBox topBox = new VBox(5, dealerLabel, dealerPane);
@@ -186,36 +183,54 @@ public class G_Main extends Application {
             VBox box = new VBox(5, nameLbl, pPane);
             box.setAlignment(Pos.CENTER);
             playersBox.getChildren().add(box);
-            // esimesed kaardid
-            hand.lisaKaart(deck.jaga());
-            hand.lisaKaart(deck.jaga());
         }
 
-        // Nupud
+        //hit button
         hitBtn = new Button("Hit"); hitBtn.setMinWidth(150);
         hitBtn.setStyle(CssUtil.getCss("nuppud"));
-        standBtn = new Button("Stand"); standBtn.setMinWidth(150);
-        standBtn.setStyle(CssUtil.getCss("nuppud"));
-        hitBtn.setMaxWidth(Double.MAX_VALUE); standBtn.setMaxWidth(Double.MAX_VALUE);
-        controlsBox = new VBox(10, hitBtn, standBtn);
-        controlsBox.setAlignment(Pos.TOP_CENTER);
-        controlsBox.setPadding(new Insets(10));
-        controlsBox.setPrefWidth(120);
-
+        hitBtn.setMaxWidth(Double.MAX_VALUE); hitBtn.setMaxWidth(Double.MAX_VALUE);
         hitBtn.setOnAction(e -> onHit());
+        //stand button
+        standBtn = new Button("Stand"); standBtn.setMinWidth(150);
+        standBtn.setMaxWidth(Double.MAX_VALUE); standBtn.setMaxWidth(Double.MAX_VALUE);
+        standBtn.setStyle(CssUtil.getCss("nuppud"));
         standBtn.setOnAction(e -> onStand());
+        //restart button
+        restartBtn = new Button("Restart samade sättetega");restartBtn.setMinWidth(230);
+        restartBtn.setStyle(CssUtil.getCss("nuppud"));
+        restartBtn.setMaxWidth(Double.MAX_VALUE); restartBtn.setMaxWidth(Double.MAX_VALUE);
+        restartBtn.setOnAction(e -> {restartGame();});
+        //config button
+        confBtn = new Button("Muuda mängu sätteid");
+        confBtn.setStyle(CssUtil.getCss("nuppud"));confBtn.setMinWidth(230);
+        confBtn.setMaxWidth(Double.MAX_VALUE); confBtn.setMaxWidth(Double.MAX_VALUE);
+        confBtn.setOnAction(e -> {kuvaSeadistusVaade();});
+        //controlsbox mängu controls jaoks
+        gameControlsBox = new VBox(10,hitBtn,standBtn);
+        gameControlsBox.setAlignment(Pos.TOP_CENTER);
+        gameControlsBox.setPadding(new Insets(10));
+        gameControlsBox.setPrefWidth(120);
+        //controlsbox peale mängu nuppude jaoks
+        endControlsBox = new VBox(10,restartBtn,confBtn);
+        endControlsBox.setAlignment(Pos.TOP_CENTER);
+        endControlsBox.setPadding(new Insets(10));
+        endControlsBox.setPrefWidth(120);
+        endControlsBox.setDisable(true);
+        endControlsBox.setVisible(false);
 
         // Layout
         gameRoot = new BorderPane();
         gameRoot.setTop(topBox);
         gameRoot.setBottom(playersBox);
-        gameRoot.setRight(controlsBox);
+        gameRoot.setRight(gameControlsBox);
         //gameRoot.setBackground(new Background(new BackgroundFill(
         //        Color.web("#5c442d"), CornerRadii.EMPTY, Insets.EMPTY)));
         gameRoot.setStyle(CssUtil.getCss("root"));
         stage.setTitle("Blackjack");
         stage.setScene(new Scene(gameRoot, 800, 600));
         stage.show();
+
+        runGame();
 
         updateControls();
     }
@@ -226,9 +241,25 @@ public class G_Main extends Application {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        dealerView.getKaardid().clear();
+        dealerView.clear();
         dealerView.lisaKaart(deck.jaga());
         dealerView.lisaKaart(deck.jaga());
+        for(G_käsi gk : playerHands){
+            gk.clear();
+            gk.lisaKaart(deck.jaga());
+            gk.lisaKaart(deck.jaga());
+        }
+    }
+
+    private void restartGame(){
+        gameControlsBox.setDisable(false);
+        gameControlsBox.setVisible(true);
+        endControlsBox.setVisible(false);
+        gameRoot.setRight(gameControlsBox);
+        gameRoot.setCenter(null);
+        gameRoot.layout();
+        currentPlayer = 0;
+        runGame();
     }
 
     //Käib läbi Hit toimingu praegusel mängijal.
@@ -246,7 +277,7 @@ public class G_Main extends Application {
         if (currentPlayer < playerHands.size()) {
             updateControls();
         } else {
-            controlsBox.setVisible(false);
+            gameControlsBox.setVisible(false);
             // Robotmängijad
             for (int i = 1; i < playerHands.size(); i++) {
                 G_käsi ph = playerHands.get(i);
@@ -268,8 +299,7 @@ public class G_Main extends Application {
         PlayerConfig pc = configs.get(currentPlayer);
         hitBtn.setText("Hit: " + pc.name);
         standBtn.setText("Stand: " + pc.name);
-        hitBtn.setDisable(pc.isBot);
-        standBtn.setDisable(pc.isBot);
+        gameControlsBox.setDisable(pc.isBot);
         // robotid saavad automaatse käigu ehk kohe Stand
         if (pc.isBot) {
             onStand();
@@ -300,6 +330,7 @@ public class G_Main extends Application {
             this.isBot = isBot;
         }
     }
+
     private void showResult() {
         int dealerSum = arvutaSumma(dealerView.getKaardid());
         String winner = "Diiler";
@@ -313,13 +344,22 @@ public class G_Main extends Application {
             }
         }
 
-        Label resultLabel = new Label(
-                String.format("Mäng läbi! Võitja: %s (%d)", winner, best)
-        );
-
-        resultLabel.setStyle(CssUtil.getCss("result"));
-        BorderPane.setAlignment(resultLabel, Pos.CENTER);
-        gameRoot.setCenter(resultLabel);
+        if(tulemused == null){
+            tulemused = new Label(
+                    String.format("Mäng läbi! Võitja: %s (%d)", winner, best)
+            );
+        }else{
+            tulemused.setVisible(true);
+            tulemused.setText(
+                    String.format("Mäng läbi! Võitja: %s (%d)", winner, best)
+            );
+        }
+        endControlsBox.setDisable(false);
+        endControlsBox.setVisible(true);
+        tulemused.setStyle(CssUtil.getCss("result"));
+        BorderPane.setAlignment(tulemused, Pos.CENTER);
+        gameRoot.setCenter(tulemused);
+        gameRoot.setRight(endControlsBox);
     }
 
     public static void main(String[] args) {
