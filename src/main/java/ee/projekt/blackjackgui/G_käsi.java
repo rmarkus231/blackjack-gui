@@ -4,79 +4,94 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.TilePane;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-/**G_käsi loob horisontaalse TilePane’i, kuhu lisatakse G_kaart-vormingus kaardid.
- * Kaardid on üksteisele osaliselt kattuvad, et imiteerida reaalse käe efekti.
+/**
+ * G_käsi kuvab kaardikäe TilePane'is.
+ * Kaardid ilmuvad horisontaalselt pooleldi kattudes.
+ * Võimaldab näidata skoori valge suurema fondiga.
  */
 public class G_käsi {
-    private final TilePane käsi;
-    private final GridPane grid;
+    private final GridPane gridPane;
+    private final TilePane käsiPane;
     private final Label skoorSilt;
     private final List<Kaart> kaardid;
 
-    //esialgselt jagatud kaartide loend
-    public G_käsi(List<Kaart> initialCards, boolean overlapped) {
-        this.kaardid = new ArrayList<>(initialCards);
-        käsi = new TilePane();
+    /**
+     * @param initialCards algkaardid
+     * @param showScore kas näidata skoori silt
+     */
+    public G_käsi(List<Kaart> initialCards, boolean showScore) {
+        // Loo gridpane kahte ritta (skoor ja käed)
+        gridPane = new GridPane();
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setHgrow(Priority.ALWAYS);
+        gridPane.getColumnConstraints().add(cc);
+        gridPane.getRowConstraints().addAll(
+                new RowConstraints(), // rida skoorile
+                new RowConstraints()  // rida käe vaatele
+        );
+
+        // Skoori silt
         skoorSilt = new Label();
-        grid = new GridPane();
-        grid.setAlignment(Pos.TOP_CENTER);
-        grid.setHgap(10);
-        skoorSilt.setStyle(CssUtil.getCss("skoor-silt"));
-        käsi.getStyleClass().add("tile-pane");
-
-        // NEGATIIVNE vahe, et kaartide pooled kattuksid
-        käsi.setStyle(CssUtil.getCss("tile-pane"));
-        käsi.setVgap(0);
-        käsi.setTileAlignment(Pos.CENTER);
-        käsi.setAlignment(Pos.CENTER);
-        käsi.setOrientation(Orientation.HORIZONTAL);
-
-        // Lisa esialgsed kaardid
-        for (Kaart kaart : initialCards) {
-            käsi.getChildren().add(new G_kaart(kaart));
+        skoorSilt.setTextFill(Color.WHITE);
+        skoorSilt.setStyle("-fx-font-size:16px; -fx-font-weight:bold;");
+        if (showScore) {
+            gridPane.add(skoorSilt, 0, 0);
         }
 
-        ColumnConstraints colC = new ColumnConstraints();
-        colC.setHgrow(Priority.ALWAYS);
-        RowConstraints rowC = new RowConstraints();
-        rowC.setVgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().addAll(colC);
-        grid.getRowConstraints().addAll(rowC);
-        grid.add(skoorSilt, 0, 0);
-        grid.add(käsi, 0, 1);
-    }
-    public G_käsi(List<Kaart> initialCards) {
-        this(initialCards, true);
+        // Käe pane: kaardid reas pooleldi kattudes
+        käsiPane = new TilePane(Orientation.HORIZONTAL);
+        // overlappuse jaoks negatiivne hgap
+        if (showScore) {
+            käsiPane.setHgap(-60);
+        } else {
+            käsiPane.setHgap(5);
+        }
+        käsiPane.setAlignment(Pos.CENTER);
+        gridPane.add(käsiPane, 0, showScore ? 1 : 0);
+
+        // Init kaardid
+        kaardid = new ArrayList<>(initialCards);
+        for (Kaart k : initialCards) {
+            käsiPane.getChildren().add(new G_kaart(k));
+        }
+        if (showScore) arvutaSkoor();
     }
 
-    //Lisab jooksvalt ühe kaardi nii GUI-sse kui ka sisemisse loendisse.
+    /** Lisab uue kaardi */
     public void lisaKaart(Kaart kaart) {
         kaardid.add(kaart);
+        käsiPane.getChildren().add(new G_kaart(kaart));
         arvutaSkoor();
-        käsi.getChildren().add(new G_kaart(kaart));
     }
 
-    public void clear(){
-        käsi.getChildren().clear();
+    /** Tühjendab käe ja skoori */
+    public void clear() {
         kaardid.clear();
+        käsiPane.getChildren().clear();
+        skoorSilt.setText("");
     }
 
-    // tagastab kaardid selles käes
+    /** Tagastab kaardid mudelina */
     public List<Kaart> getKaardid() {
         return kaardid;
     }
 
+    /** Tagastab JavaFX sõlme, mida on võimalik GUI-s kuvada */
     public Node getNode() {
-        return grid;
+        return gridPane;
     }
 
-    public void arvutaSkoor(){
+    /** Uuendab skoori silt’i teksti */
+    private void arvutaSkoor() {
         skoorSilt.setText("Skoor: " + Käsi.sum(kaardid));
-        return;
     }
 }

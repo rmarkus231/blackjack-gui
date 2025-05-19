@@ -1,15 +1,15 @@
-/* Üldine akna taust (nüüd rakendub .root-ile) */
+/* Üldine akna taust (rakendub .root-ile) */
 .root {
     -fx-background-image: url("wood-seamless.jpg");
-    -fx-background-repeat: repeat;         /* or no-repeat, stretch */
+    -fx-background-repeat: repeat;
     -fx-background-position: center center;
     -fx-background-size: auto;
 }
 
 /* Käte kastid */
 .card-hand {
-    -fx-background-image: url("green-cloth.jpg");
-    -fx-background-repeat: repeat;         /* or no-repeat, stretch */
+    -fx-background-image: url("green-cloth2.jpg");
+    -fx-background-repeat: repeat;
     -fx-background-position: center center;
     -fx-background-size: auto;
     -fx-padding: 12;
@@ -19,50 +19,54 @@
     -fx-border-width: 3px;
 }
 
-.nuppud {
+/* Nupud */
+.nupud {
+    -fx-background-color: #93C572;
     -fx-text-fill: black;
-    -fx-background-color: #32783C;
-    -fx-background-radius: 3px, 3px;
-    -fx-padding: 10%, 10%;
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-border-radius: 3px;
-    -fx-background-insets: 0;
-    -fx-background-insets: 0;
     -fx-font-size: 18px;
-}
-
-/* silt jooksva skoori näitamiseks*/
-.skoor-silt {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-}
-
-.vbox {
-    -fx-padding: 10px,0px;
-}
-
-.nime-silt {
-    -fx-font-size: 23px;
-    -fx-text-fill: black;
-    -fx-background-color: #32783C;
-    -fx-background-radius: 10px, 10px;
-    -fx-padding: 10%, 10%;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px 20px;
     -fx-border-color: black;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-background-insets: 0;
+}
+
+/* Skoori silt */
+.skoor-silt {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* VBox keskele joondamiseks */
+.vbox {
+    -fx-padding: 10px 0px;
+    -fx-alignment: center;
+}
+
+/* Mängija ja diiler silt */
+.nime-silt {
+    -fx-font-size: 25px;
+    -fx-text-fill: white;
+    -fx-background-color: #93C572;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
     -fx-background-insets: 0;
 }
 
-/* silt sättede sildi jaoks */
+/* Seadete vaate silt */
 .seade-silt {
-    -fx-font-size: 14px;
+    -fx-font-size: 20px;
+    -fx-text-fill: black;
 }
 
-/* TilePane, et kaardid kataksid üksteist */
+/* TilePane overlapping cards */
 .tile-pane {
-    -fx-hgap: -20;   /* negatiivne, et kattuvad */
+    -fx-hgap: -20;
     -fx-vgap: 0;
 }
 
@@ -71,17 +75,15 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
 }
 
-/* Mängu lõpu tulemustekst */
+/* Mängu lõpp tulemuste tekst */
 .result {
-    -fx-font-size: 23px;
+    -fx-font-size: 25px;
     -fx-text-fill: black;
-    -fx-background-color: #32783C;
-    -fx-background-radius: 10px, 10px;
-    -fx-padding: 10%, 10%;
+    -fx-background-color: #93C572;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
     -fx-border-color: black;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
     -fx-background-insets: 0;
-    -fx-background-insets: 0;
-
 }

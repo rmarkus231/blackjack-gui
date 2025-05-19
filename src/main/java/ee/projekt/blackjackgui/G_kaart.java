@@ -68,7 +68,7 @@ public class G_kaart extends StackPane {
 
 class testG_kaart {
     public static void main(String[] args) throws Exception {
-        //kasutasin path leidmise täätamise kontrollimiseks
+        //kasutasin path leidmise töötamise kontrollimiseks
         System.out.println();
         G_kaart gk = new G_kaart(new Kaart('♥',"9"));
     }
