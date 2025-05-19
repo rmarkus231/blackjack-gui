@@ -74,6 +74,7 @@ public class G_Main extends Application {
         exitButton .setOnAction(e -> Platform.exit());
 
         VBox root = new VBox(20, startButton, helpButton, infoButton, exitButton);
+        root.setStyle(CssUtil.getCss("main-menu"));
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
         root.setFillWidth(false);
@@ -83,11 +84,7 @@ public class G_Main extends Application {
 
     private void kuvaHelp() {
         // 1) Laeme taustapildi
-        Image bgImage = new Image(getClass().getResource("/green-cloth2.jpg").toExternalForm());
-        BackgroundImage background = new BackgroundImage(
-                bgImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-                BackgroundPosition.CENTER, new BackgroundSize(1,1,true,true,false,false)
-        );
+       //taustapildi laadimine viidud üle css'ile
 
         // 2) Tekstiplokid (sarnaselt eelmisel korral)
         Text title1 = new Text("Blackjack mängureeglid");
@@ -140,17 +137,24 @@ public class G_Main extends Application {
         backButton.setOnAction(e -> kuvaMainMenu());
 
         VBox content = new VBox(20, rulesBox, buttonsBox, backButton);
+        content.setStyle(CssUtil.getCss("tiled-background"));
         content.setPadding(new Insets(30));
         content.setAlignment(Pos.TOP_CENTER);
 
         // 3) Pane taust ja lisa scroll
-        content.setBackground(new Background(background));
         ScrollPane scroll = new ScrollPane(content);
         scroll.setFitToWidth(true);
-        scroll.setStyle("-fx-background-color:transparent;");
+        content.minHeightProperty().bind(scroll.heightProperty());
+        //scroll.setStyle(CssUtil.getCss("scroll")+CssUtil.getCss("help-background"));
+
+        //lae üksteise peale, et background oleks sujuv
+        StackPane kokku = new StackPane();
+        kokku.setStyle(CssUtil.getCss("scroll")+CssUtil.getCss("tiled-background"));
+        kokku.getChildren().addAll(content,scroll);
 
         primaryStage.setTitle("Blackjack – help");
-        primaryStage.setScene(new Scene(scroll, primaryStage.getWidth(), primaryStage.getHeight()));
+        Scene helpScene = new Scene(kokku, primaryStage.getWidth(), primaryStage.getHeight());
+        primaryStage.setScene(helpScene);
     }
 
     private void kuvaInfo() {
@@ -158,7 +162,7 @@ public class G_Main extends Application {
         Image bgImage = new Image(getClass().getResource("/green-cloth2.jpg").toExternalForm());
         BackgroundImage background = new BackgroundImage(
                 bgImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
-                BackgroundPosition.CENTER, new BackgroundSize(1,1,true,true,false,false)
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT
         );
 
         Label info = new Label(
@@ -188,7 +192,7 @@ public class G_Main extends Application {
         );
         decksSpinner.setPrefWidth(70);
         Label decksLabel = new Label("Pakkide arv:");
-        decksLabel.setStyle("-fx-font-size:18px;" + CssUtil.getCss("seade-silt"));
+        decksLabel.setStyle( CssUtil.getCss("seade-silt"));
         HBox decksBox = new HBox(10, decksLabel, decksSpinner);
         decksBox.setAlignment(Pos.CENTER);
 
@@ -198,7 +202,7 @@ public class G_Main extends Application {
         );
         playersSpinner.setPrefWidth(70);
         Label playersLabel = new Label("Mängijate arv:");
-        playersLabel.setStyle("-fx-font-size:18px;" + CssUtil.getCss("seade-silt"));
+        playersLabel.setStyle(CssUtil.getCss("seade-silt"));
         HBox playersBox = new HBox(10, playersLabel, playersSpinner);
         playersBox.setAlignment(Pos.CENTER);
 
@@ -248,7 +252,7 @@ public class G_Main extends Application {
 
         Label dealerLabel = new Label("Diiler");
         dealerLabel.setTextFill(Color.WHITE);
-        dealerLabel.setStyle("-fx-font-size:16px; -fx-font-weight:bold;");
+        dealerLabel.setStyle(CssUtil.getCss("nime-silt"));
         Node dealerNode = dealerView.getNode();
         ((Region)dealerNode).setStyle(CssUtil.getCss("card-hand"));
         dealerNode.setScaleX(0.9);
@@ -269,7 +273,7 @@ public class G_Main extends Application {
             pnode.setScaleY(0.6);
             Label nameLbl = new Label(pc.name);
             nameLbl.setTextFill(Color.WHITE);
-            nameLbl.setStyle("-fx-font-size:16px; -fx-font-weight:bold;");
+            nameLbl.setStyle(CssUtil.getCss("nime-silt"));
             VBox box = new VBox(1);
             box.setSpacing(0);
             box.setPadding(new Insets(0));
@@ -280,7 +284,7 @@ public class G_Main extends Application {
 
         turnLabel = new Label();
         turnLabel.setTextFill(Color.WHITE);
-        turnLabel.setStyle("-fx-font-size:16px; -fx-font-weight:bold;");
+        turnLabel.setStyle(CssUtil.getCss("turn-label"));
         hitBtn = new Button("Hit");
         hitBtn.setStyle(CssUtil.getCss("nupud"));
         hitBtn.setOnAction(e -> onHit());
@@ -333,6 +337,7 @@ public class G_Main extends Application {
         endControlsBox.setVisible(false);
         gameRoot.setBottom(bottomBox);
     }
+
     private void nextTurn() {
         // kui kõik mängijad on käinud, siis last dealeril teha oma voor ja kuvame tulemuse
         if (currentPlayer >= configs.size()) {
@@ -346,7 +351,6 @@ public class G_Main extends Application {
         }
         updateControls();
     }
-
 
     private void showResult() {
         // 1) Kogume kõik ≤21 punktiga mängijad
@@ -368,6 +372,7 @@ public class G_Main extends Application {
         if (validScores.isEmpty()) {
             resultText = "Mäng läbi! Keegi ei võitnud";
         } else {
+            //TODO Lisada asi selleks kui mitu mängijat saavad 21 (või muu sama skoor)
             Map.Entry<String,Integer> winner = validScores.entrySet().stream()
                     .max(Comparator.comparing(Map.Entry::getValue))
                     .get();
@@ -380,7 +385,7 @@ public class G_Main extends Application {
         if (resultLabel == null) {
             resultLabel = new Label();
             resultLabel.setTextFill(Color.WHITE);
-            resultLabel.setStyle("-fx-font-size:18px; -fx-font-weight:bold;");
+            resultLabel.setStyle(CssUtil.getCss("result"));
         }
         resultLabel.setText(resultText);
 
