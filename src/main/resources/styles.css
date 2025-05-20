@@ -58,9 +58,9 @@
 
 /* Seadete vaate silt */
 .seade-silt {
-    -fx-font-size: 20px;
-    -fx-text-fill: black;
-    -fx-font-size:18px;
+    -fx-font-size: 30px;
+    -fx-text-fill: white;
+    -fx-font-size:25px;
 }
 
 .scroll {
@@ -78,12 +78,18 @@
 .tile-pane .stack-pane {
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0, 0, 2);
 }
-
 .main-menu{
-    -fx-background-image: url('laud.jpg');
+    -fx-background-image: url("laud.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
     -fx-background-size: 100% 100%;
+}
+.seaded-taust {
+    -fx-background-image: url("green-cloth2.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-position: center center;
+    -fx-background-color: auto;
+    -fx-padding: 30;
 }
 
 .tiled-background {

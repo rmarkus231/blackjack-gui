@@ -18,7 +18,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Comparator;
 
 
 import java.util.*;
@@ -83,10 +82,7 @@ public class G_Main extends Application {
     }
 
     private void kuvaHelp() {
-        // 1) Laeme taustapildi
-       //taustapildi laadimine viidud üle css'ile
-
-        // 2) Tekstiplokid (sarnaselt eelmisel korral)
+        // Tekstiplokid (sarnaselt eelmisel korral)
         Text title1 = new Text("Blackjack mängureeglid");
         title1.setFont(Font.font("System", FontWeight.BOLD, 24));
         title1.setFill(Color.WHITE);
@@ -186,6 +182,11 @@ public class G_Main extends Application {
     }
 
     private void kuvaSeadistusVaade() {
+        Image bgImage = new Image(getClass().getResource("/green-cloth2.jpg").toExternalForm());
+        BackgroundImage background = new BackgroundImage(
+                bgImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT
+        );
         // spinnerite algväärtused
         Spinner<Integer> decksSpinner = new Spinner<>(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 8, previousDeckCount)
@@ -234,13 +235,13 @@ public class G_Main extends Application {
         HBox buttonBar = new HBox(20, backButton, startBtn);
         buttonBar.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(30, decksBox, playersBox, playersConfigBox, buttonBar);
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(40));
-        root.setFillWidth(false);
+        VBox content = new VBox(30, decksBox, playersBox, playersConfigBox, buttonBar);
+        content.setAlignment(Pos.CENTER);
+        content.setPadding(new Insets(40));
+        content.setBackground(new Background(background));
 
         primaryStage.setTitle("Blackjack - seadistused");
-        primaryStage.setScene(new Scene(root, primaryStage.getWidth(), primaryStage.getHeight()));
+        primaryStage.setScene(new Scene(content, primaryStage.getWidth(), primaryStage.getHeight()));
         primaryStage.show();
     }
 
@@ -332,7 +333,7 @@ public class G_Main extends Application {
             node.setScaleX(scale);
             node.setScaleY(scale);
         }
-        turnLabel.setText("Turn: " + configs.get(currentPlayer).name);
+        turnLabel.setText("Kelle kord: " + configs.get(currentPlayer).name);
         controlsBox.setVisible(true);
         endControlsBox.setVisible(false);
         gameRoot.setBottom(bottomBox);
@@ -487,7 +488,6 @@ public class G_Main extends Application {
         Node top = gameRoot.getTop();
         if (top instanceof VBox) {
             VBox topBox = (VBox) top;
-            // esimene laps on originaal top, teine on resultLabel
             if (topBox.getChildren().size() == 2 && topBox.getChildren().get(1) == resultLabel) {
                 topBox.getChildren().remove(1);
             }
@@ -533,7 +533,7 @@ public class G_Main extends Application {
             TextField tf = new TextField(defaultName);
             CheckBox cb = new CheckBox("robot?");
             cb.setSelected(defaultBot);
-            HBox row = new HBox(10, lbl, tf, cb);
+            HBox row = new HBox(20, lbl, tf, cb);
             row.setAlignment(Pos.CENTER);
             box.getChildren().add(row);
         }
