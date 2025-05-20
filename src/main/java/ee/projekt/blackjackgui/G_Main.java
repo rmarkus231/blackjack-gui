@@ -247,7 +247,7 @@ public class G_Main extends Application {
 
     private void initGame(Stage stage, int deckCount) {
         try { deck = new Kaardipakk(deckCount); } catch (Exception e) { throw new RuntimeException(e); }
-        dealerView = new G_käsi(new ArrayList<>(), false);
+        dealerView = new G_käsi(new ArrayList<>(), false,null);
         playerHands = new ArrayList<>();
         currentPlayer = 0;
 
@@ -266,7 +266,7 @@ public class G_Main extends Application {
         playersContainer = new HBox(20);
         playersContainer.setAlignment(Pos.CENTER);
         for (PlayerConfig pc : configs) {
-            G_käsi hand = new G_käsi(new ArrayList<>(), true);
+            G_käsi hand = new G_käsi(new ArrayList<>(), true,pc);
             playerHands.add(hand);
             Node pnode = hand.getNode();
             ((Region)pnode).setStyle(CssUtil.getCss("card-hand"));
@@ -333,24 +333,20 @@ public class G_Main extends Application {
             node.setScaleX(scale);
             node.setScaleY(scale);
         }
-        turnLabel.setText("Kelle kord: " + configs.get(currentPlayer).name);
-        controlsBox.setVisible(true);
+        G_käsi kelleKord = playerHands.get(currentPlayer);
+        turnLabel.setText("Kelle kord: " + kelleKord.getName());
+        if(kelleKord.isBot()){
+            controlsBox.setVisible(false);
+            ArrayList<G_käsi> prevPlayers = new ArrayList<>();
+            for(int i = 0; i < currentPlayer;i++){
+                prevPlayers.add(playerHands.get(i));
+            }
+            int botAction = RobotWrapper.run(kelleKord,prevPlayers,dealerView,deck);
+        }else{
+            controlsBox.setVisible(true);
+        }
         endControlsBox.setVisible(false);
         gameRoot.setBottom(bottomBox);
-    }
-
-    private void nextTurn() {
-        // kui kõik mängijad on käinud, siis last dealeril teha oma voor ja kuvame tulemuse
-        if (currentPlayer >= configs.size()) {
-            // diiler võtab kaarte (kuni ≥17)
-            while (arvutaSumma(dealerView.getKaardid()) < 17) {
-                dealerView.lisaKaart(deck.jaga());
-            }
-            // näitame tulemust
-            showResult();
-            return;
-        }
-        updateControls();
     }
 
     private void showResult() {
@@ -468,6 +464,7 @@ public class G_Main extends Application {
             while (arvutaSumma(dealerView.getKaardid()) < 17) {
                 dealerView.lisaKaart(deck.jaga());
             }
+            dealerView.näitaPeidetud();
             showResult();
         }
     }
@@ -512,7 +509,7 @@ public class G_Main extends Application {
         try { deck.reset(); } catch (Exception e) { throw new RuntimeException(e); }
         dealerView.clear();
         dealerView.lisaKaart(deck.jaga());
-        dealerView.lisaKaart(deck.jaga());
+        dealerView.lisaKaart(deck.jaga(),true);
         for (G_käsi hand : playerHands) {
             hand.clear();
             hand.lisaKaart(deck.jaga());
@@ -530,6 +527,7 @@ public class G_Main extends Application {
                 defaultBot  = configs.get(i - 1).isBot;
             }
             Label lbl = new Label("Mängija " + i + " nimi:");
+            lbl.setTextFill(Color.WHITE);
             TextField tf = new TextField(defaultName);
             CheckBox cb = new CheckBox("robot?");
             cb.setSelected(defaultBot);
@@ -539,7 +537,7 @@ public class G_Main extends Application {
         }
     }
 
-    private int arvutaSumma(List<Kaart> kaardid) {
+    public int arvutaSumma(List<Kaart> kaardid) {
         int sum = 0, aces = 0;
         for (Kaart k : kaardid) {
             switch (k.getTugevus()) {
@@ -552,14 +550,5 @@ public class G_Main extends Application {
             sum += (sum + 11 <= 21 ? 11 : 1);
         }
         return sum;
-    }
-
-    private static class PlayerConfig {
-        final String name;
-        final boolean isBot;
-        PlayerConfig(String name, boolean isBot) {
-            this.name = name;
-            this.isBot = isBot;
-        }
     }
 }

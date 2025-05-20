@@ -13,12 +13,14 @@ import javafx.scene.text.Text;
  * pehme pastel-taust, masti ja tugeva teksti ning nurgasümbolid.
  */
 public class G_kaart extends StackPane {
-    private static final double WIDTH = 100;
-    private static final double HEIGHT = 150;
-    private static final double ARC = 10;
-    private static final double SHADOW_RADIUS = 4;
+    protected static final double WIDTH = 100;
+    protected static final double HEIGHT = 150;
+    protected static final double ARC = 10;
+    protected static final double SHADOW_RADIUS = 4;
+    protected Kaart kaart;
 
     public G_kaart(Kaart kaart) {
+        this.kaart = kaart;
         // 1) Taust: helehall aluskast ja pastel-sinine äär
         Rectangle bg = new Rectangle(WIDTH, HEIGHT);
         bg.setFill(Color.web("#FAFAFA"));         // helehall
@@ -59,6 +61,12 @@ public class G_kaart extends StackPane {
         this.setMaxSize(WIDTH, HEIGHT);
         this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(bg, center, topLeft, bottomRight);
+    }
+
+    public G_kaart() {}
+
+    public Kaart getKaart() {
+        return kaart;
     }
 
     private boolean isRedSuit(char mast) {

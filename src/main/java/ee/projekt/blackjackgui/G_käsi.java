@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * G_käsi kuvab kaardikäe TilePane'is.
  * Kaardid ilmuvad horisontaalselt pooleldi kattudes.
@@ -23,12 +24,16 @@ public class G_käsi {
     private final TilePane käsiPane;
     private final Label skoorSilt;
     private final List<Kaart> kaardid;
+    private List<G_kaart> p_kaardid= new ArrayList<>();
+    private PlayerConfig config;
 
     /**
      * @param initialCards algkaardid
      * @param showScore kas näidata skoori silt
      */
-    public G_käsi(List<Kaart> initialCards, boolean showScore) {
+
+    public G_käsi(List<Kaart> initialCards, boolean showScore, PlayerConfig conf) {
+        this.config = conf;
         // Loo gridpane kahte ritta (skoor ja käed)
         gridPane = new GridPane();
         ColumnConstraints cc = new ColumnConstraints();
@@ -68,9 +73,34 @@ public class G_käsi {
 
     /** Lisab uue kaardi */
     public void lisaKaart(Kaart kaart) {
+        //not hidden by default
         kaardid.add(kaart);
-        käsiPane.getChildren().add(new G_kaart(kaart));
+        G_kaart k = new G_kaart(kaart);
+        käsiPane.getChildren().add(k);
         arvutaSkoor();
+    }
+    //optional argument
+    public void lisaKaart(Kaart kaart, boolean hidden) {
+        if(hidden) {
+            kaardid.add(kaart);
+            G_kaart k = new G_peidetudKaart(kaart);
+            p_kaardid.add(k);
+            käsiPane.getChildren().add(k);
+            arvutaSkoor();
+        }else{
+            lisaKaart(kaart);
+        }
+    }
+
+    public void näitaPeidetud(){
+        for(G_kaart p : p_kaardid){
+                int index = käsiPane.getChildren().indexOf(p);
+                G_kaart k = new G_kaart(p.getKaart());
+                //un hide ja muuda pilt ära
+                //asenda samas kohas (samad dimensioonid jms anyway)
+                käsiPane.getChildren().set(index,k);
+        }
+        gridPane.requestLayout();
     }
 
     /** Tühjendab käe ja skoori */
@@ -93,5 +123,26 @@ public class G_käsi {
     /** Uuendab skoori silt’i teksti */
     private void arvutaSkoor() {
         skoorSilt.setText("Skoor: " + Käsi.sum(kaardid));
+    }
+
+    public String getName(){
+        //avoid null pointer exception
+        if(config != null){
+            return config.name;
+        }else{
+            return "Diiler";
+        }
+    }
+
+    public boolean isBot(){
+        //avoid null pointer exception
+        if(config != null){
+            return config.isBot;
+        }
+        return false;
+    }
+
+    public int kaartideArv(){
+        return kaardid.size();
     }
 }
