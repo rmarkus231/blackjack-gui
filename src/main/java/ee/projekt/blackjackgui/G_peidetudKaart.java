@@ -13,7 +13,7 @@ public class G_peidetudKaart extends G_kaart{
         this.kaart = kaart;
         // 1) Taust: helehall aluskast ja pastel-sinine äär
         Rectangle bg = new Rectangle(WIDTH, HEIGHT);
-        bg.setFill(Color.web("#FAFAFA"));         // helehall
+        bg.setFill(Color.web("BLACK"));         // Must kaarti tagune
         bg.setStroke(Color.web("#CFD8DC"));       // sinakashall äär
         bg.setArcWidth(ARC);
         bg.setArcHeight(ARC);
@@ -22,9 +22,9 @@ public class G_peidetudKaart extends G_kaart{
         // 2) Keskmine tekst: masti sümbol + tugevus
         String suit = String.valueOf(kaart.getMast());
         String rank = kaart.getTugevus();
-        Text center = new Text("??");
+        Text center = new Text("B");
         center.setFont(Font.font("Segoe UI", 36));
-        center.setFill(Color.DARKGRAY); // kui tegemist tundmatu kaardiga siis mast ja kaks ?? sinist on keskel
+        center.setFill(Color.GOLD); // kui tegemist tundmatu kaardiga siis mast ja B on keskel
 
         // Lõplik kokkupanek
         this.setPrefSize(WIDTH, HEIGHT);

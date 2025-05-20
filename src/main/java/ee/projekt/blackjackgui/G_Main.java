@@ -115,10 +115,10 @@ public class G_Main extends Application {
         title2.setFill(Color.WHITE);
 
         Text buttons = new Text(
-                "• Hit: võtta juurde kaart.\n" +
+                "• Hit: võta kaart juurde.\n" +
                         "• Stand: lõpetada kaartide võtmine.\n" +
                         "• Restart samade sätetega: alusta uut vooru samade mängijate ja pakkide arvuga.\n" +
-                        "• Muuda seadistusi: naase seadistustele ja muuda mängijate arvu/nimesid.\n" +
+                        "• Muuda seadistusi: naase seadistustele ja muuda mängijate arvu/nimesid/on-ei ole robot.\n" +
                         "• Main menu: naase peamenüüsse."
         );
         buttons.setFont(Font.font(14));
