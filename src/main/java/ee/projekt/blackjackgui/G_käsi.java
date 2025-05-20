@@ -106,6 +106,7 @@ public class G_käsi {
     /** Tühjendab käe ja skoori */
     public void clear() {
         kaardid.clear();
+        p_kaardid.clear();
         käsiPane.getChildren().clear();
         skoorSilt.setText("");
     }
@@ -142,7 +143,7 @@ public class G_käsi {
         return false;
     }
 
-    public int kaartideArv(){
-        return kaardid.size();
+    public Kaart getKaart(int index){
+        return kaardid.get(index);
     }
 }

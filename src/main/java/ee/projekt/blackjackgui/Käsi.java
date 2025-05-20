@@ -14,6 +14,10 @@ public abstract class Käsi implements Comparable<Käsi> {
         this.nimi = nimi;
     }
 
+    public Käsi(ArrayList<Kaart> kaardid){
+        this.kaardid = kaardid;
+    }
+
     public void lisa(Kaart kaart){
         kaardid.add(kaart);
     }

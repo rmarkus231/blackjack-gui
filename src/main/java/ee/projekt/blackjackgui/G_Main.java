@@ -335,6 +335,9 @@ public class G_Main extends Application {
         }
         G_käsi kelleKord = playerHands.get(currentPlayer);
         turnLabel.setText("Kelle kord: " + kelleKord.getName());
+        controlsBox.setVisible(true);
+        endControlsBox.setVisible(false);
+        gameRoot.setBottom(bottomBox);
         if(kelleKord.isBot()){
             controlsBox.setVisible(false);
             ArrayList<G_käsi> prevPlayers = new ArrayList<>();
@@ -342,11 +345,12 @@ public class G_Main extends Application {
                 prevPlayers.add(playerHands.get(i));
             }
             int botAction = RobotWrapper.run(kelleKord,prevPlayers,dealerView,deck);
-        }else{
-            controlsBox.setVisible(true);
+            if(botAction == 0){
+                onHit();
+            }else {
+                onStand();
+            }
         }
-        endControlsBox.setVisible(false);
-        gameRoot.setBottom(bottomBox);
     }
 
     private void showResult() {
@@ -410,7 +414,6 @@ public class G_Main extends Application {
         }
 
         gameRoot.setTop(newTop);
-
         controlsBox.setVisible(false);
         endControlsBox.setVisible(true);
         gameRoot.setBottom(endControlsBox);
@@ -441,11 +444,10 @@ public class G_Main extends Application {
             // liigume järgmise mängija peale
             onStand();
             return;
-        }
-
-        // auto-stand 21 puhul
-        if (sum == 21) {
+        }else if (sum == 21) {
             onStand();
+        }else{
+            updateControls();
         }
     }
 
@@ -454,12 +456,6 @@ public class G_Main extends Application {
         if (currentPlayer < playerHands.size()) {
             updateControls();
         } else {
-            // Bot-mängijad
-            for (int i = 1; i < playerHands.size(); i++) {
-                while (arvutaSumma(playerHands.get(i).getKaardid()) < 17) {
-                    playerHands.get(i).lisaKaart(deck.jaga());
-                }
-            }
             // Diileri kaartide jagamine
             while (arvutaSumma(dealerView.getKaardid()) < 17) {
                 dealerView.lisaKaart(deck.jaga());
@@ -530,6 +526,7 @@ public class G_Main extends Application {
             lbl.setTextFill(Color.WHITE);
             TextField tf = new TextField(defaultName);
             CheckBox cb = new CheckBox("robot?");
+            cb.setTextFill(Color.WHITE);
             cb.setSelected(defaultBot);
             HBox row = new HBox(20, lbl, tf, cb);
             row.setAlignment(Pos.CENTER);
@@ -537,7 +534,7 @@ public class G_Main extends Application {
         }
     }
 
-    public int arvutaSumma(List<Kaart> kaardid) {
+    public static int arvutaSumma(List<Kaart> kaardid) {
         int sum = 0, aces = 0;
         for (Kaart k : kaardid) {
             switch (k.getTugevus()) {
