@@ -353,53 +353,67 @@ public class G_Main extends Application {
     }
 
     private void showResult() {
-        // 1) Kogume kõik ≤21 punktiga mängijad
-        Map<String,Integer> validScores = new LinkedHashMap<>();
+        Map<String, Integer> validScores = new LinkedHashMap<>();
         for (int i = 0; i < playerHands.size(); i++) {
             int sum = arvutaSumma(playerHands.get(i).getKaardid());
             if (sum <= 21) {
                 validScores.put(configs.get(i).name, sum);
             }
         }
-        // 2) Lisame diileri, kui ta ei ole bust
+
         int dealerSum = arvutaSumma(dealerView.getKaardid());
+        System.out.println("Diileri summa: " + dealerSum);
         if (dealerSum <= 21) {
             validScores.put("Diiler", dealerSum);
         }
 
-        // 3) Koostame tulemuse teksti
         String resultText;
         if (validScores.isEmpty()) {
             resultText = "Mäng läbi! Keegi ei võitnud";
         } else {
-            //TODO Lisada asi selleks kui mitu mängijat saavad 21 (või muu sama skoor)
-            Map.Entry<String,Integer> winner = validScores.entrySet().stream()
-                    .max(Comparator.comparing(Map.Entry::getValue))
-                    .get();
-            resultText = String.format("Mäng läbi! Võitja: %s (%d)",
-                    winner.getKey(),
-                    winner.getValue());
+            int maxScore = Collections.max(validScores.values());
+            List<String> winners = new ArrayList<>();
+
+            for (Map.Entry<String, Integer> entry : validScores.entrySet()) {
+                if (entry.getValue() == maxScore) {
+                    winners.add(entry.getKey());
+                }
+            }
+
+            if (winners.size() > 1) {
+                resultText = String.format("Viik mängijate vahel: %s (%d)", String.join(", ", winners), maxScore);
+            } else {
+                resultText = String.format("Mäng läbi! Võitja: %s (%d)", winners.get(0), maxScore);
+            }
         }
 
-        // 4) Loo või uuenda resultLabel (stiil ja font ainult üks kord)
+        // Veendume, et resultLabel on alati nähtav
         if (resultLabel == null) {
             resultLabel = new Label();
             resultLabel.setTextFill(Color.WHITE);
             resultLabel.setStyle(CssUtil.getCss("result"));
         }
-        resultLabel.setText(resultText);
 
-        //Igakordne top-paneeli uuendamine – lükame dealerPane ja resultLabel ühte vBox’i
+        resultLabel.setText(resultText);
+        resultLabel.setVisible(true);  // kindlasti nähtav
+
         Node dealerPane = gameRoot.getTop();
-        // Kui dealerPane ise on juba vBox, mille sees on vanad lapsed, võta esimeseks
-        if (dealerPane instanceof VBox && ((VBox)dealerPane).getChildren().contains(resultLabel)) {
-            dealerPane = ((VBox)dealerPane).getChildren().get(0);
-        }
-        VBox newTop = new VBox(8, dealerPane, resultLabel);
+        VBox newTop = new VBox(8);
         newTop.setAlignment(Pos.CENTER);
+
+        if (dealerPane instanceof VBox) {
+            VBox existingVBox = (VBox) dealerPane;
+            newTop.getChildren().addAll(existingVBox.getChildren());
+        } else {
+            newTop.getChildren().add(dealerPane);
+        }
+
+        if (!newTop.getChildren().contains(resultLabel)) {
+            newTop.getChildren().add(resultLabel);
+        }
+
         gameRoot.setTop(newTop);
 
-        // 6) Näita ainult lõpunupud
         controlsBox.setVisible(false);
         endControlsBox.setVisible(true);
         gameRoot.setBottom(endControlsBox);
