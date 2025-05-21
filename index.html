@@ -19,15 +19,24 @@
     <br>
     <div class="row">
         <!-- Table of Contents Column -->
-        <div class="col-md-3">
-            <div class="sticky-top pt-3">
-                <h5 class="mb-3">Sisukord</h5>
+        <div class="col-md-5">
+            <div class="sticky-top pt-4">
+                <h3 class="mb-3">Sisukord</h3>
                 <nav id="toc" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 rounded">
                     <nav class="nav nav-pills flex-column">
-                        <a class="nav-link" href="#section1">Kirjeldus</a>
-                        <a class="nav-link" href="#section2">Käivitamisjuhis</a>
-                        <a class="nav-link" href="#section3">Mängu voog</a>
-                        <a class="nav-link" href="#section4">Section 4</a>
+                        <a class="nav-link text-success" href="#section1">Kirjeldus</a>
+                        <a class="nav-link text-success" href="#section2">Käivitamisjuhis</a>
+                        <a class="nav-link text-success" href="#section3">Mängu voog</a>
+                        <a class="nav-link text-success" href="#section4">Terminali versiooni klasside kirjeldused:</a>
+                            <nav class="nav nav-pills flex-column ms-3">
+                                <a class="nav-link text-success" href="#section4-1"> Mäng.java</a>
+                                <a class="nav-link text-success" href="#section4-2"> Kaardipakk.java</a>
+                                <a class="nav-link text-success" href="#section4-3"> Käsi.java</a>
+                                <a class="nav-link text-success" href="#section4-4"> kaart.java</a>
+                                <a class="nav-link text-success" href="#section4-5"> Mängija.java</a>
+                                <a class="nav-link text-success" href="#section4-6"> Diiler.java</a>
+                                <a class="nav-link text-success" href="#section4-7"> Strateegia.java</a>
+                            </nav>
                     </nav>
                 </nav>
             </div>
@@ -97,8 +106,68 @@
             </section>
             
             <section id="section4" class="py-3">
-                <h2>Section 4</h2>
-                <p>Content for section 4...</p>
+                <h2>Klasside kirjeldused</h2>
+                <section id="section4-1" class="py-3 px-2">
+                    <h3>Mäng.java</h3>
+                    <p>Terminali versiooni loogika põhiklass mis juhib mängu kulgu, mängijate lisamist jms.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Mäng::mängijad</b> - küsib mängijate arvu.</li>
+                        <li class="list-group-item"><b>Mäng::pakkideArv</b> - küsib mängus olevate pakkide arvu.</li>
+                        <li class="list-group-item"><b>Mäng::start</b> - Siin toimub pea mängu loop, tehakse mängijate objektid ja võrreldakse punkte</li>
+                    </ul>
+                </section>
+                <section id="section4-2" class="py-3 px-2">
+                    <h3>Kaardipakk.java</h3>
+                    <p>Haldab kaardipaki loomist, segamist ning kaartide jagamist. Sisaldab loogikat tagamaks, et jagatud kaardid ei korduks. Konstruktor loob kaartide massiivi vastavalt sellele mitu pakki on mängus.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Kaardipakk::shuffle</b> - ennast seletav</li>
+                        <li class="list-group-item"><b>Kaardipakk::getKaart</b> - võtab esimese kaardi segatud listist, eemaldab ja tagastab.</li>
+                    </ul>
+                </section>
+                <section id="section4-3" class="py-3 px-2">
+                    <h3>Käsi.java</h3>
+                    <p class="text-warning">abstraktne klass</p>
+                    <p>Esindab mängija või diileri käes olevaid kaarte. Võimaldab kaarte lisada ning arvutab automaatselt kaartide punktisumma, et lihtsustada tulemuse kontrollimist.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><span class="text-warning">abstraktne</span> <b>Käsi::tegutse</b> - meetod mida alamklassid peavad implementeerima selleks, et nende kord käia.</li>
+                        <li class="list-group-item"><b>Käsi::sum</b> - annab käes olevate kaartide summa arvestades seda, et ässad on väärtusega 1 kui summa läheb üle 21.</li>
+                        <li class="list-group-item"><b>Käsi::getValik</b> - küsib terminalist mida mängija tahab teha.</li>
+                        <li class="list-group-item"><b>Käsi::sisaldab</b> - võtab string massiivi ja tagastab true kui kõik kaardid mis on massiivis esinevad käes olevate kaartide hulgas.</li>
+                    </ul>
+                </section>
+                <section id="section4-4" class="py-3 px-2">
+                    <h3>Kaart.java</h3>
+                    <p>Üksiku mängukaarti kuvamine, mis sisaldab kaardi väärtust ja masti. Võimaldab kuvada kasutajale kaardi arusaadaval kujul.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Kaart::toString</b> -  annab kena teksti vaate masti ja väärtusega</li>
+                    </ul>
+                </section>
+                <section id="section4-5" class="py-3 px-2">
+                    <h3>Mängia.java</h3>
+                    <p class="text-warning"> laiendab <a class="text-success" href="#section4-3">Käsi.java</a></p>
+                    <p>Mängijat esindav klass. Hoiab infot selle kohta, millised kaardid on mängija käes ning võimaldab mängijal teha valikuid, kas võtta veel üks kaart (hit) või jääda olemasoleva käega seisma (stand). Klass sisaldab roboti käitumist</p>
+                    <p></p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Mängija::tegutse</b> - kui tegemist on mängijaga siis kutsub Käsi::getValik, et mängija käest küsida tegevust. Kui tegemist on robot mängijaga siis Käsi::getValik asemel kutsutakse Mängija::valikRobot, muud dialoog jääb samaks.</li>
+                        <li class="list-group-item"><b>Mängija::valikRobot</b> - olenevalt robot keerukusest kas kasutab Strateegia::valik lookup-table’it või otsustab kasutades Strateegia::tõenäosusBust, olenevalt sellest kas bustimise tõenäosus on üle 50%.</li>
+                    </ul>
+                </section>
+                <section id="section4-6" class="py-3 px-2">
+                    <h3>Diiler.java</h3>
+                    <p class="text-warning"> laiendab <a class="text-success" href="#section4-3">Käsi.java</a></p>
+                    <p>Lihtsustatud AI, mis järgib diileri reegleid (võtab kaarte kuni punkte on 17)</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Diiler::tegutse</b> - võtab kaardi kui alla 17, ei võta kui mitte.</li>
+                    </ul>
+                </section>
+                <section id="section4-7" class="py-3 px-2">
+                    <h3>Strateegia.java</h3>
+                    <p>Sisaldab robotite loogikat (lihtne ja keeruline raskusaste) ning kaartide tõenäosuste arvutamine.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Strateegia::valik</b> - lookup table’il põhinev parim tegevus arvestades ainult enda ja diileri kaarte.</li>
+                        <li class="list-group-item"><b>Strateegia::tõenäosusBust</b> - parim valik arvestades kõiki kaarte mängus</li>
+                    </ul>
+                </section>
             </section>
         </div>
     </div>
