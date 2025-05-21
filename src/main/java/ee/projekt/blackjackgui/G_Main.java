@@ -543,6 +543,8 @@ public class G_Main extends Application {
                 default: sum += Integer.parseInt(k.getTugevus());
             }
         }
+        sum += aces;
+
         for (int i = 0; i < aces; i++) {
             sum += (sum + 11 <= 21 ? 11 : 1);
         }

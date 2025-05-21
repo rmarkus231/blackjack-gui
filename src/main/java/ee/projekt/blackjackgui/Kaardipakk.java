@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
-/**
- * Kaardipakk haldab ühte või mitut kaardipakki, segamist ja kaartide jagamist.
+/*Kaardipakk haldab ühte või mitut kaardipakki, segamist ja kaartide jagamist.
  */
 public class Kaardipakk {
     private ArrayList<Kaart> kaardid;
@@ -13,9 +12,7 @@ public class Kaardipakk {
     public static String[] tugevused = {"A","K","Q","J","10","9","8","7","6","5","4","3","2"};
     private final int pakkide_arv;
 
-    /**
-     * Loob ja segab uue Kaardipaki vastavalt antud pakkide arvule.
-     * @param pakkideArv kasutatavate pakkide arv
+    /*Loob ja segab uue Kaardipaki vastavalt antud pakkide arvule.
      */
     public Kaardipakk(int pakkideArv) throws Exception {
         this.pakkide_arv = pakkideArv;
@@ -30,8 +27,7 @@ public class Kaardipakk {
         return pakkide_arv;
     }
 
-    /**
-     * Lisab kaardid massiivist vastavalt mastidele ja tugevustele.
+    /*Lisab kaardid massiivist vastavalt mastidele ja tugevustele.
      */
     private void create() throws Exception {
         for (char m : mastid) {
@@ -41,15 +37,13 @@ public class Kaardipakk {
         }
     }
 
-    /**
-     * Segab kaardipaki juhuslikkuse saavutamiseks.
+    /*Segab kaardipaki juhuslikkuse saavutamiseks.
      */
     public void shuffle() {
         Collections.shuffle(kaardid);
     }
 
-    /**
-     * Taastab paki algseisundisse, kasutades sama pakkide arvu.
+    /*Taastab paki algseisundisse, kasutades sama pakkide arvu.
      */
     public void reset() throws Exception {
         kaardid.clear();
@@ -59,9 +53,7 @@ public class Kaardipakk {
         shuffle();
     }
 
-    /**
-     * Võtab pakist esimese kaardi ja tagastab selle. Visatakse erind, kui pakk on tühi.
-     * @return järgmine kaart
+    /*Võtab pakist esimese kaardi ja tagastab selle. Visatakse erind, kui pakk on tühi.
      */
     public Kaart jaga() {
         if (kaardid.isEmpty()) {
@@ -70,16 +62,13 @@ public class Kaardipakk {
         return kaardid.remove(0);
     }
 
-    /**
-     * Alias vana nime säilitamiseks.
-     * @return järgmine kaart
+    /*Alias vana nime säilitamiseks.
      */
     public Kaart getKaart() {
         return jaga();
     }
 
-    /**
-     * Konverteerib masti-sümboli tekstiliseks nimeks pildifailide jaoks.
+    /*Konverteerib masti-sümboli tekstiliseks nimeks pildifailide jaoks.
      */
     public static String mastConv(char m) {
         switch (m) {
