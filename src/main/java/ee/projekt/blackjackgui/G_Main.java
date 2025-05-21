@@ -537,16 +537,17 @@ public class G_Main extends Application {
     public static int arvutaSumma(List<Kaart> kaardid) {
         int sum = 0, aces = 0;
         for (Kaart k : kaardid) {
-            switch (k.getTugevus()) {
-                case "A": aces++; break;
-                case "K": case "Q": case "J": case "10": sum += 10; break;
-                default: sum += Integer.parseInt(k.getTugevus());
+            if(k.onÄss()){
+                aces++;
             }
+            sum += k.getTugevus_i();
         }
-        sum += aces;
+        //sum += aces;
 
         for (int i = 0; i < aces; i++) {
-            sum += (sum + 11 <= 21 ? 11 : 1);
+            if(sum > 21){
+                sum -= 10;
+            }
         }
         return sum;
     }
