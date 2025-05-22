@@ -65,7 +65,7 @@ public class G_Main extends Application {
         List<Button> buttons = List.of(startButton, helpButton, infoButton, exitButton);
         for (Button btn : buttons) {
             btn.setStyle(CssUtil.getCss("nupud"));
-            btn.setPrefWidth(120);
+            btn.setPrefWidth(130);
         }
         startButton.setOnAction(e -> kuvaSeadistusVaade());
         helpButton .setOnAction(e -> kuvaHelp());
@@ -103,7 +103,7 @@ public class G_Main extends Application {
                         "   – Kõik, kelle summa ≤21: suurima summaga võidab.\n" +
                         "   – Kui kõik bustivad, keegi ei võida."
         );
-        rules.setFont(Font.font(14));
+        rules.setFont(Font.font(18));
         rules.setFill(Color.WHITE);
         rules.setLineSpacing(4);
 
@@ -121,7 +121,7 @@ public class G_Main extends Application {
                         "• Muuda seadistusi: naase seadistustele ja muuda mängijate arvu/nimesid/on-ei ole robot.\n" +
                         "• Main menu: naase peamenüüsse."
         );
-        buttons.setFont(Font.font(14));
+        buttons.setFont(Font.font(18));
         buttons.setFill(Color.WHITE);
         buttons.setLineSpacing(4);
 
