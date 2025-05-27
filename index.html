@@ -37,6 +37,16 @@
                                 <a class="nav-link text-success" href="#section4-6"> Diiler.java</a>
                                 <a class="nav-link text-success" href="#section4-7"> Strateegia.java</a>
                             </nav>
+                            <a class="nav-link text-success" href="#section5">Graafilise versiooni klasside kirjeldused:</a>
+                            <nav class="nav nav-pills flex-column ms-3">
+                                <a class="nav-link text-success" href="#section5-1"> G_Main.java</a>
+                                <a class="nav-link text-success" href="#section5-2"> G_Kaart.java</a>
+                                <a class="nav-link text-success" href="#section5-3"> G_peidetudKaart.java</a>
+                                <a class="nav-link text-success" href="#section5-4"> G_Käsi.java</a>
+                                <a class="nav-link text-success" href="#section5-5"> Playerconfig.java</a>
+                                <a class="nav-link text-success" href="#section5-6"> CssUtil.java</a>
+                                <a class="nav-link text-success" href="#section5-7"> RobotWrapprer.java</a>
+                            </nav>
                     </nav>
                 </nav>
             </div>
@@ -166,6 +176,79 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><b>Strateegia::valik</b> - lookup table’il põhinev parim tegevus arvestades ainult enda ja diileri kaarte.</li>
                         <li class="list-group-item"><b>Strateegia::tõenäosusBust</b> - parim valik arvestades kõiki kaarte mängus</li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section id="section5" class="py-3">
+                <h2>Graafilises versioonis kasutatud klasside kirjeldused</h2>
+                <section id="section5-1" class="py-3 px-2">
+                    <h3>G_Main.java</h3>
+                    <p>Graafilise osa peaklass. Mängu loogika põhiklass mis juhib mängu kulgu, nuppude callback funktsioone ja hoiab graafika objekte.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>G_Main::start</b> - Luuakse mängi aken etteantud suuruses</li>
+                        <li class="list-group-item"><b>G_Main::kuvaMainMenu</b> - kuvab mängu algnuppud</li>
+                        <li class="list-group-item"><b>G_Main::kuvaHelp</b> - kuvab "Help" vaates oleva teksti, mängureeglid ja nuppude tähendused.</li>
+                        <li class="list-group-item"><b>G_Main::kuvaInfo</b> - kuvab “Info” vaates oleva teksti.</li>
+                        <li class="list-group-item"><b>G_Main::kuvaSeadistusVaade</b> - kuvab mängu seadete vaate. Selles vaates küsitakse kasutajalt kaardipakkide ja mängijate arvu, mängijate nimesid, ning kas on robot või ei. Seda kuvatakse kui mängija vajutab põhimenüüst start. </li>
+                        <li class="list-group-item"><b>G_Main::initGame</b> - käivitab mängu ja kuvab mänguvaate koos nuppudega. Loob mängu objektid. Seab mänguloogika juhtimiseks nupusündmused. Seda kutsutakse peale mängu seadistamist või peale sättete muutmist peale roundi mängimist.</li>
+                        <li class="list-group-item"><b>G_Main::updateControls</b> - uuendab mängu vaadet, kelle kord on, mis nuppe kuvatakse jms.</li>
+                        <li class="list-group-item"><b>G_Main::showResult</b> - näitab kes võitis ja mis tulemusega.</li>
+                        <li class="list-group-item"><b>G_Main::onHit</b> - kontrollib mis juhtub "hit" nuppu vajutades, seda kasutab ka robot mängija.</li>
+                        <li class="list-group-item"><b>G_Main::onStand</b> - kontrollib mis juhtub "stand" nuppu vajutades, automaatselt kustutud välja kui skoor läheb üle 21. Seda kutsub ka välja robot ja diiler tehes oma otsust. Kuvab diileri kaardi kui tegemist on diileri käiguga.</li>
+                        <li class="list-group-item"><b>G_Main::restartGame</b> - alustab uue vooru samade sätetega. Kasutab samu graafika objekte mis oli eelmises mängus. Taastab kõik alg olekusse ja segab uue(d) kaardipakki(d).</li>
+                        <li class="list-group-item"><b>G_Main:uuendaMangijateSeadistus</b> - kuvab mängijate seadistuse kastid ja raadionupud.</li>
+                        <li class="list-group-item"><b>G_Main::arvutaSumma</b> - arvutab kaartide summa.</li>
+                    </ul>
+                </section>
+                <section id="section5-2" class="py-3 px-2">
+                    <h3>G_Kaart.java</h3>
+                    <p class="text-warning"> laiendab <a class="text-success" href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/layout/StackPane.html">javafx.scene.layout.StackPane.java</a></p>
+                    <p></p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>G_kaart::G_kaart</b> - loob kaardi elemendid ning lisab need lasteks.</li>
+                    </ul>
+                </section>
+                <section id="section5-3" class="py-3 px-2">
+                    <h3>G_peidetudKaart.java</h3>
+                    <p class="text-warning"> laiendab <a class="text-success" href="#section5-2">G_Kaart.java</a></p>
+                    <p></p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>G_peidetudKaart::G_peidetudKaart</b> - Mõeldud Diileri peidetud kaardi kuvamiseks. </li>
+                    </ul>
+                </section>
+                <section id="section5-4" class="py-3 px-2">
+                    <h3>G_Käsi.java</h3>
+                    <p>Esindab mängija või diileri käes olevaid kaarte. Võimaldab kaarte lisada ning arvutab automaatselt kaartide punktisumma, et lihtsustada tulemuse kontrollimist.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>G_Käsi::G_käsi</b> - loob erinevad boxid mänguvaates diileri ja mängiijate kaartide jaoks, sealhulgas skoori näidik jms.</li>
+                        <li class="list-group-item"><b>G-Käsi::lisaKaart</b> - lisab uue kaardi.</li>
+                        <li class="list-group-item"><b>G_Käsi::näitaPeidetud</b> - kuvab peidetud kaardid kui on mõni.</li>
+                        <li class="list-group-item"><b>G_Käsi::clear</b> - tühjendab käe ja skoori.</li>
+                        <li class="list-group-item"><b>G_Käsi::getKaardid</b> -  tagastab <a class="text-success" href="#section4-4">Kaart</a> tüüpi objektidena kaardid.</li>
+                        <li class="list-group-item"><b>G_Käsi::getNode</b> - tagastab JavaFX sõlme, mida GUI-s kuvada.</li>
+                        <li class="list-group-item"><b>G_Käsi::arvutaSkoor</b> - uuendab skoori infot.</li>
+                        <li class="list-group-item"><b>G_Käsi::getName</b> -tagastab sisestatud nime.</li>
+                        <li class="list-group-item"><b>G_Käsi::isBot</b> - kontrollib kas on robot või ei.</li>
+                        <li class="list-group-item"><b>G_Käsi::getKaart</b> - tagastab etteantud indeksil oleva kaardi.</li>
+                    </ul>
+                </section>
+                <section id="section5-5" class="py-3 px-2">
+                    <h3>Playerconfig.java</h3>
+                    <p>mõeldud andmete talletamiseks (nimi ja kas tegemist on robotiga).</p>
+                </section>
+                <section id="section5-6" class="py-3 px-2">
+                    <h3>CssUtil.java</h3>
+                    <p>Mõeldud JavaFX CSS laadimiseks. See klass võtab teatud faili asjad styles.css failis ja annab nendele klassidele, kellel seda vaja on. See implementeeriti, sest lihtsalt css faili paigaldamine tervele projektile kirjutab üle javaFX vaike css.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>CssUtil::getCss</b> - Tagastab etteantud klassile määratud css failist styles.css</li>
+                    </ul>
+                </section>
+                <section id="section5-7" class="py-3 px-2">
+                    <h3>RobotWrapprer.java</h3>
+                    <p>Ilma konstruktoriteta klass, mis laseb robotil käituda nagu mängija. Graafilise versiooni robot kasutab ainult Strateegia::tõenäosusBust, Roboti lihtsam AI ei ole graafilses versioonis implementeeritud, sest me ei leidnud, et seda on vaja. Roboti imiteerib mängijat ning kasutab samasid callback funktsioone mis nuppud mängija jaoks.</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>RobotWrapprer::run</b> -  teeb otsuse kas hit või mitte oma käe, diileri käe, kõikide eelmiste mängijate käte põhjal ja kaardipakki põhjal. See põhimõteliselt loeb kaarte.</li>
                     </ul>
                 </section>
             </section>
