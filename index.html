@@ -25,6 +25,10 @@
                 <nav id="toc" class="navbar navbar-light bg-light flex-column align-items-stretch p-3 rounded">
                     <nav class="nav nav-pills flex-column">
                         <a class="nav-link text-success" href="#section1">Kirjeldus</a>
+                        <a class="nav-link text-success" href="#section1-2">Projekti tegevused ja ajalkulu</a>
+                        <a class="nav-link text-success" href="#section1-3">Mured ja probleemid</a>
+                        <a class="nav-link text-success" href="#section1-4">Hinnang antud tehtud tööle</a>
+                        <a class="nav-link text-success" href="#section1-5">Programmi selgitus</a>
                         <a class="nav-link text-success" href="#section2">Käivitamisjuhis</a>
                         <a class="nav-link text-success" href="#section3">Mängu voog</a>
                         <a class="nav-link text-success" href="#section4">Terminali versiooni klasside kirjeldused:</a>
@@ -54,13 +58,48 @@
         
         <!-- Main Content Column -->
         <div class="col-md-9">
-            <section id="section1" class="py-3">
+            <section id="section1-1" class="py-3">
                 <h2>Kirjeldus</h2>
                 <p>Tegemist on meie 1. projekti edasiarendusega, terminali blackjack mäng. Eelkõige on juurde lisatud graafiline liides.
                 Eesmärk oli luua lihtne ajaveetmise kaardimäng ja valisime selleks Blackjack’i, mis on üks tuntumaid kaardimänge. Programm on jagatud erinevatesse klassidesse mis on kirjeldatud allpool. 
                 </p>
             </section>
+        </div>
             
+        <div class="col-md-9">
+            <section id="section1-2" class="py-3">
+                <h2>Projekti tegevused ja ajakulu</h2>
+                <p>Programmeerimiseks kasutatud Intellij ja versioonihalduseks GitHubi. Mängu algne idee tuli Richardilt ja ülejäänud teostus on mõlemapoolne panus. Projekti käigus suhtlemiseks kasutasime eelkõige Discordi kus sai vestluseid pidada ja vajadusel ekraani/pilte jagada. Erilist etapilist jaotust projekti puhul ei loonud, sest ei olnud vajadust. <br><br>
+                Esialgu põrgatasime erinevaid ideid ja mõtteid, mida üldse teha ja kui see paika sai, siis hakkasime asjaga pihta. Ajakulu vaatest mõlemad kulutasime umbes 10h nädalas projektile. Viimasel nädalal ülevaatamiseks ja paranduste sisseviimiseks rohkem. 
+                <br><br>Richard pani paika mängu üldise kondikava. Lauri võttis alguses ette põhiloogika ehk Mäng.java. Arendamise käigus täiendasime üksteise kirjutatud klasse ja meetoteid ning tegime parandusi eesmärgiga hoida programmi loogika ühtne ja selgesti arusaadav. <br><br>
+                Projekt 2 osas graafilise osa kujunduse ja kondikava mõtles välja Lauri ja alguses edasised arendused lisas Richard. Kahe peale katsetades erinevaid variante leidsime, et mõistlikum on teha minimalistlik ja kergesti arusaadav mäng. Ajaliselt kulutasime veidi vähem aega kui projekt 1 puhul. Tööjaotus loogika oli sarnane.</p>
+            </section>
+        </div>
+
+        <div class="col-md-9">
+            <section id="section1-3" class="py-3">
+                <h2>Mured ja probleemid</h2>
+                <p>Üldiselt muresid ja probleeme ei esinenud, koostöö sujus ka selle projekti puhul rahulikus tempos. Koodi osas esialgu pisike seisak oli sellest, et aru saada millest siis täpselt alustada ja kuidas eelmine projekt ühildada graafilise versiooniga. Teiseks mureks oli võitjate info õigesti kuvamine, mis oli sarnane mure esimese projekti puhul. </p>
+            </section>
+        </div>
+
+        <div class="col-md-9">
+            <section id="section1-4" class="py-3">
+                <h2>Hinnang tehtud tööle</h2>
+                <p>Kirjutatud kood on üsna loetav ja jaotatud loogiliselt klassidesse ning järgib blackjack’i üldiseid reegleid. Mäng on mängitav ja teeb ajaveetmise veidi lõbusamaks. Edasised arengud võiksid olla seotud graafilise osa täiendamisega, result tabeli kuvamisega ja loogika viimistlemisega. Ainuke asi milles kahtleme on see, et G_main.java on nii suur aga n.ö globaalsete klassiobjektide edasiandmine oleks natuke segane</p>
+            </section>
+        </div>
+
+        <div class="col-md-9">
+            <section id="section1-5" class="py-3">
+                <h2>Selgitused programmi kohta</h2>
+                <p>Programm küsib kasutajalt sisendeid (raadio ja tavanupud ning text fields) valikute tegemiseks. Mängus saab määrata kui palju kaardipakke kasutatakse.
+                Praeguses versioonis saab mängida kuni 5 mängijat ühe diileri vastu. Mängijate seast saab määrata roboteid.<br><br>
+                Programmeerimise käigus lõime vastavad klassid osade kaupa, et testida klassi toimivust. Hiljem testisime põhjalikult, mängides seda mitu korda läbi erinevate kaardipakkide, mängijate ja robotite arvuga, et veenduda, et kõik töötab korralikult ja ilma vigadeta. Testimise lihtsuseks saab määrata kõiki mängijad robotiteks.
+                Näidisringi läbiviimiseks kuvatakse mängija ja diileri kaarte ja näidatakse lõpuks, kes vooru võitis ja miks.</p>
+            </section>
+        </div>
+
             <section id="section2" class="py-3">
                 <h2>Käivitamisjuhis</h2>
                 <b>Käivita mäng java rakendusena.</b>
@@ -89,6 +128,18 @@
             
             <section id="section3" class="py-3">
                 <h2>Mängu voog</h2>
+                <!--showcase gif-->
+                <div class="container my-5">
+                    <div class="card" style="width: 50%;">
+                        <div class="card-body p-0">
+                            <img src="media/showcase.gif" alt="Animated GIF showcasing the program in action" class="img-fluid">
+                        </div>
+                        <div class="card-footer bg-light">
+                            <button class="btn btn-success btn-sm">Play</button>
+                            <button class="btn btn-secondary btn-sm ms-2">Stop</button>
+                        </div>
+                    </div>
+                </div>
                 <p class="">Peale mängi alustamist kuvatakse kõikide mängijate kaardid ning diilerile jagatud esimene kaart, diileri teine kaart on peidetud.</p>
                 <b>Mängija valikud:</b>
                 <ul class="list-group list-group-flush">
